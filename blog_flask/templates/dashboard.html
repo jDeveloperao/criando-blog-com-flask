@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard</title>
+
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Georgia, "Times New Roman", serif;
+        }
+
+        :root{
+
+            --bg:#ffffff;
+            --card:#ffffff;
+            --text:#1a1a1a;
+            --border:#e5e5e5;
+            --muted:#777;
+            --hover:#f5f5f5;
+
+        }
+
+        body.dark{
+
+            --bg:#0f0f0f;
+            --card:#181818;
+            --text:#f5f5f5;
+            --border:#2b2b2b;
+            --muted:#9d9d9d;
+            --hover:#222;
+
+        }
+
+        body{
+            background:var(--bg);
+            color:var(--text);
+            transition:0.3s;
+            min-height:100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar{
+            width:240px;
+            height:100vh;
+            position:fixed;
+            top:0;
+            left:0;
+            border-right:1px solid var(--border);
+            background:var(--card);
+            padding:28px 20px;
+        }
+
+        .logo{
+            font-size:28px;
+            font-weight:700;
+            margin-bottom:45px;
+        }
+
+        .nav-links{
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+        }
+
+        .nav-links a{
+            text-decoration:none;
+            color:var(--text);
+            padding:13px 14px;
+            border:1px solid transparent;
+            transition:0.2s;
+            font-size:15px;
+        }
+
+        .nav-links a:hover{
+            background:var(--hover);
+            border-color:var(--border);
+        }
+
+        .sidebar-bottom{
+            margin-top:40px;
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+        }
+
+        .theme-toggle{
+            border:1px solid var(--border);
+            background:transparent;
+            color:var(--text);
+            padding:13px 14px;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            gap:10px;
+            transition:0.2s;
+            font-size:14px;
+        }
+
+        .theme-toggle:hover{
+            background:var(--hover);
+        }
+
+        .logout-link{
+            text-decoration:none;
+            color:var(--text);
+            border:1px solid var(--border);
+            padding:13px 14px;
+            transition:0.2s;
+            font-size:14px;
+        }
+
+        .logout-link:hover{
+            background:var(--hover);
+        }
+
+        /* MAIN */
+
+        .main{
+            margin-left:240px;
+            padding:35px;
+        }
+
+        /* TOPBAR */
+
+        .topbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding-bottom:22px;
+            border-bottom:1px solid var(--border);
+            margin-bottom:30px;
+        }
+
+        .welcome h1{
+            font-size:34px;
+            margin-bottom:6px;
+        }
+
+        .welcome p{
+            font-size:14px;
+            color:var(--muted);
+        }
+
+        .profile{
+            width:42px;
+            height:42px;
+            border:1px solid var(--border);
+            background:var(--hover);
+        }
+
+        /* FLASH */
+
+        .flash{
+            background:var(--hover);
+            border-left:3px solid var(--text);
+            padding:12px 14px;
+            font-size:14px;
+            margin-bottom:20px;
+        }
+
+        /* STATS */
+
+        .stats{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:14px;
+            margin-bottom:35px;
+        }
+
+        .stat{
+            border:1px solid var(--border);
+            padding:22px;
+            border-radius:14px;
+            background:var(--card);
+            transition:0.2s;
+        }
+
+        .stat:hover{
+            transform:translateY(-2px);
+        }
+
+        .stat h3{
+            font-size:13px;
+            color:var(--muted);
+            margin-bottom:8px;
+        }
+
+        .stat p{
+            font-size:30px;
+            font-weight:700;
+        }
+
+        /* HEADER */
+
+        .header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:25px;
+        }
+
+        .header h2{
+            font-size:28px;
+        }
+
+        .btn{
+            text-decoration:none;
+            background:#111;
+            color:#fff;
+            border:1px solid #111;
+            padding:12px 18px;
+            transition:0.2s;
+            font-size:14px;
+        }
+
+        .btn:hover{
+            background:#333;
+        }
+
+        body.dark .btn{
+            background:#fff;
+            color:#111;
+            border-color:#fff;
+        }
+
+        /* POSTS */
+
+        .posts{
+            display:flex;
+            flex-direction:column;
+            gap:18px;
+        }
+
+        .post{
+            border:1px solid var(--border);
+            border-radius:18px;
+            padding:24px;
+            background:var(--card);
+            transition:0.2s;
+        }
+
+        .post:hover{
+            transform:translateY(-2px);
+        }
+
+        .post-top{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:14px;
+        }
+
+        .title{
+            font-size:24px;
+            font-weight:700;
+        }
+
+        .status{
+            font-size:12px;
+            padding:6px 12px;
+            border-radius:30px;
+        }
+
+        .published{
+            background:rgba(0,255,0,0.08);
+            color:green;
+        }
+
+        .draft{
+            background:rgba(255,0,0,0.08);
+            color:red;
+        }
+
+        .post-preview{
+            color:var(--muted);
+            margin-bottom:22px;
+            line-height:1.7;
+            font-size:15px;
+        }
+
+        /* ACTIONS */
+
+        .actions{
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+        }
+
+        .actions button{
+            border:1px solid var(--border);
+            background:transparent;
+            color:var(--text);
+            padding:10px 14px;
+            cursor:pointer;
+            transition:0.2s;
+            font-size:13px;
+        }
+
+        .actions button:hover{
+            background:var(--text);
+            color:var(--bg);
+        }
+
+        /* RESPONSIVO */
+
+        @media(max-width:900px){
+
+            .sidebar{
+                display:none;
+            }
+
+            .main{
+                margin-left:0;
+                padding:20px;
+            }
+
+            .topbar{
+                flex-direction:column;
+                align-items:flex-start;
+                gap:20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            Dashboard
+        </div>
+
+        <nav class="nav-links">
+
+            <a href="#">
+                Início
+            </a>
+
+            <a href="{{ url_for('user.feed') }}">
+                Feed
+            </a>
+
+            <a href="#">
+                Explorar
+            </a>
+
+            <a href="#">
+                Perfil
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <button
+                class="theme-toggle"
+                onclick="toggleTheme()"
+            >
+
+                <i class="fa-solid fa-moon"></i>
+
+                <span id="theme-text">
+                    Modo nocturno
+                </span>
+
+            </button>
+
+            <a
+                class="logout-link"
+                href="{{url_for('auth.logout_user')}}"
+            >
+                Sair da conta
+            </a>
+
+        </div>
+
+    </aside>
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div class="welcome">
+
+                <h1>
+                    Olá, {{ current_user.username }}
+                </h1>
+
+                <p>
+                    Gerencie seus conteúdos e acompanhe seus posts
+                </p>
+
+            </div>
+
+            <div class="profile"></div>
+
+        </div>
+
+        <!-- FLASH -->
+
+        {% for message in get_flashed_messages() %}
+            <div class="flash">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <!-- STATS -->
+
+        <section class="stats">
+
+            <div class="stat">
+
+                <h3>Total Posts</h3>
+
+                <p>
+                    {{ posts | length }}
+                </p>
+
+            </div>
+
+            <div class="stat">
+
+                <h3>Publicados</h3>
+
+                <p>
+                    {{ publicados | length }}
+                </p>
+
+            </div>
+
+            <div class="stat">
+
+                <h3>Rascunhos</h3>
+
+                <p>
+                    {{ nao_publicados | length }}
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <h2>
+                Meus Posts
+            </h2>
+
+            <a
+                class="btn"
+                href="{{ url_for('user.cadastro') }}"
+            >
+                Novo Post
+            </a>
+
+        </div>
+
+        <!-- POSTS -->
+
+        <section class="posts">
+
+            {% for post in posts %}
+
+            <article class="post">
+
+                <div class="post-top">
+
+                    <div class="title">
+                        {{ post.titulo }}
+                    </div>
+
+                    {% if post.estado %}
+
+                        <div class="status published">
+                            Publicado
+                        </div>
+
+                    {% else %}
+
+                        <div class="status draft">
+                            Rascunho
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="post-preview">
+
+                    {{ post.conteudo[:220] }}...
+
+                </div>
+
+                <div class="actions">
+
+                    <form
+                        action="{{ url_for('user.publicar', id=post.id) }}"
+                        method="post"
+                    >
+                        <button type="submit">
+                            Publicar
+                        </button>
+                    </form>
+
+                    <form
+                        action="{{ url_for('user.edit_post', id=post.id) }}"
+                        method="post"
+                    >
+                        <button type="submit">
+                            Editar
+                        </button>
+                    </form>
+
+                    <form
+                        action="{{ url_for('user.delete_post', id=post.id) }}"
+                        method="post"
+                    >
+                        <button type="submit">
+                            Apagar
+                        </button>
+                    </form>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </section>
+
+    </main>
+
+    <script>
+
+        const body = document.body
+
+        const themeText =
+            document.getElementById("theme-text")
+
+        function updateThemeText(){
+
+            if(body.classList.contains("dark")){
+
+                themeText.textContent =
+                    "Modo claro"
+
+            }else{
+
+                themeText.textContent =
+                    "Modo nocturno"
+
+            }
+
+        }
+
+        function toggleTheme(){
+
+            body.classList.toggle("dark")
+
+            const dark =
+                body.classList.contains("dark")
+
+            localStorage.setItem(
+                "theme",
+                dark ? "dark" : "light"
+            )
+
+            updateThemeText()
+
+        }
+
+        if(localStorage.getItem("theme") === "dark"){
+
+            body.classList.add("dark")
+
+        }
+
+        updateThemeText()
+
+    </script>
+
+</body>
+</html>

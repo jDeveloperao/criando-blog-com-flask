@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Georgia, "Times New Roman", serif;
+        }
+
+        body{
+            background:#ffffff;
+            color:#1a1a1a;
+            display:flex;
+            min-height:100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar{
+            width:240px;
+            border-right:1px solid #ececec;
+            padding:30px 22px;
+            position:fixed;
+            top:0;
+            left:0;
+            height:100vh;
+            background:#fff;
+        }
+
+        .logo{
+            font-size:28px;
+            font-weight:700;
+            margin-bottom:50px;
+        }
+
+        .nav-links{
+            display:flex;
+            flex-direction:column;
+            gap:14px;
+        }
+
+        .nav-links a{
+            text-decoration:none;
+            color:#444;
+            padding:12px 14px;
+            border-radius:10px;
+            transition:0.2s;
+            font-size:16px;
+        }
+
+        .nav-links a:hover{
+            background:#f5f5f5;
+            color:#000;
+        }
+
+        .logout{
+            margin-top:40px;
+        }
+
+        /* MAIN */
+
+        .main-content{
+            margin-left:240px;
+            width:100%;
+        }
+
+        /* TOPBAR */
+
+        .topbar{
+            border-bottom:1px solid #ececec;
+            padding:22px 40px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            position:sticky;
+            top:0;
+            background:#fff;
+            z-index:10;
+        }
+
+        .search-box{
+            width:420px;
+        }
+
+        .search-box input{
+            width:100%;
+            padding:14px 18px;
+            border:none;
+            background:#f5f5f5;
+            border-radius:12px;
+            outline:none;
+            font-size:15px;
+        }
+
+        .top-actions{
+            display:flex;
+            align-items:center;
+            gap:16px;
+        }
+
+        .new-post{
+            text-decoration:none;
+            background:#111;
+            color:#fff;
+            padding:12px 18px;
+            border-radius:12px;
+            font-size:14px;
+            transition:0.2s;
+        }
+
+        .new-post:hover{
+            opacity:0.9;
+        }
+
+        /* FEED */
+
+        .container{
+            max-width:900px;
+            margin:40px auto;
+            padding:0 24px;
+        }
+
+        .feed-title{
+            font-size:38px;
+            margin-bottom:35px;
+            font-weight:700;
+        }
+
+        .post{
+            border:1px solid #f0f0f0;
+            border-radius:18px;
+            padding:28px;
+            margin-bottom:28px;
+            transition:0.3s;
+            background:#fff;
+        }
+
+        .post:hover{
+            transform:translateY(-3px);
+            box-shadow:0 8px 30px rgba(0,0,0,0.05);
+        }
+
+        .post-meta{
+            display:flex;
+            gap:10px;
+            align-items:center;
+            font-size:13px;
+            color:#777;
+            margin-bottom:14px;
+        }
+
+        .category{
+            background:#f5f5f5;
+            padding:4px 10px;
+            border-radius:20px;
+            font-size:12px;
+        }
+
+        .post-title{
+            font-size:30px;
+            font-weight:700;
+            margin-bottom:18px;
+            line-height:1.2;
+        }
+
+        .post-content{
+            font-size:17px;
+            color:#444;
+            margin-bottom:24px;
+        }
+
+        .post-footer{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .read-more{
+            text-decoration:none;
+            color:#000;
+            font-weight:600;
+            transition:0.2s;
+        }
+
+        .read-more:hover{
+            opacity:0.7;
+        }
+
+        .reading-time{
+            font-size:13px;
+            color:#777;
+        }
+
+        /* RESPONSIVO */
+
+        @media(max-width:900px){
+
+            .sidebar{
+                display:none;
+            }
+
+            .main-content{
+                margin-left:0;
+            }
+
+            .topbar{
+                padding:20px;
+            }
+
+            .search-box{
+                width:100%;
+            }
+
+            .feed-title{
+                font-size:32px;
+            }
+
+            .post-title{
+                font-size:24px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            Blog
+        </div>
+
+        <nav class="nav-links">
+
+            <a href="#">Feed</a>
+            <a href="#">Explorar</a>
+            <a href="#">Salvos</a>
+            <a href="#">Perfil</a>
+
+        </nav>
+
+        <div class="logout">
+
+            <a href="{{ url_for('auth.logout_user') }}">
+                Sair da conta
+            </a>
+
+            
+
+        </div>
+
+    </aside>
+
+    <!-- MAIN -->
+
+    <div class="main-content">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    placeholder="Buscar conteúdos..."
+                >
+
+            </div>
+
+            <div class="top-actions">
+
+                <a href="#" class="new-post">
+                    Novo Post
+                </a>
+
+            </div>
+
+        </header>
+
+        <!-- FEED -->
+
+        <main class="container">
+
+            <h1 class="feed-title">
+                Feed de conteúdos
+            </h1>
+
+            {% for post in posts %}
+
+            <article class="post">
+
+                <div class="post-meta">
+
+                    <span>
+                        {{ post.nome_dono }}
+                    </span>
+
+                    <span>•</span>
+
+                    <span>
+                        Hoje
+                    </span>
+
+                    <span class="category">
+                        Tecnologia
+                    </span>
+
+                </div>
+
+                <h2 class="post-title">
+                    {{ post.titulo }}
+                </h2>
+
+                <div class="post-content">
+
+                    {{ post.conteudo[:280] }}...
+
+                </div>
+
+                <div class="post-footer">
+
+                    <a
+                        href="#"
+                        class="read-more"
+                    >
+                        Ler completo
+                    </a>
+
+                    <span class="reading-time">
+                        5 min leitura
+                    </span>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </main>
+
+    </div>
+
+</body>
+</html>
